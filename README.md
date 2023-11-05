@@ -2,6 +2,7 @@
 “Creative breakthroughs occur,<br> 
 when worlds collide”
 </h1>
+<br>
 
 <p align="center">
   <a href="#abstract-">Abstract</a> •
