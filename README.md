@@ -1,4 +1,4 @@
-<h1 align="center">
+<h1 align="center" style="font-size:40px">
 “Creative breakthroughs occur,<br> 
 when worlds collide”
 </h1>
@@ -12,6 +12,7 @@ when worlds collide”
   <a href="#timeline-">Timeline</a> •
   <a href="#team-organization-">Team Organization</a>
 </p>
+<br>
 
 ## Abstract 📌
 
