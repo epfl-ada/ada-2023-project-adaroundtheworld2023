@@ -4,12 +4,12 @@ when worlds collide”
 </h1>
 
 <p align="center">
-  <a href="#abstract">Abstract</a> •
-  <a href="#research-questions">Research Questions</a> •
-  <a href="#additional-datasets">Additional Datasets</a> •
-  <a href="#methods">Methods</a> •
-  <a href="#timeline">Timeline</a> •
-  <a href="#team-organization">Team Organization</a>
+  <a href="#abstract-">Abstract</a> •
+  <a href="#research-questions-">Research Questions</a> •
+  <a href="#additional-datasets-">Additional Datasets</a> •
+  <a href="#methods-">Methods</a> •
+  <a href="#timeline-">Timeline</a> •
+  <a href="#team-organization-">Team Organization</a>
 </p>
 
 ## Abstract 📌
