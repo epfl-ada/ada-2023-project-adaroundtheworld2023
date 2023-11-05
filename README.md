@@ -1,10 +1,9 @@
-<h1 align="center" style="font-size:40px">
-“Creative breakthroughs occur,<br> 
-when worlds collide”
-</h1>
+# “Creative breakthroughs occur, when worlds collide”
+
 <br>
 
-<p align="center">
+## Table of Contents
+<p>
   <a href="#abstract-">Abstract</a> •
   <a href="#research-questions-">Research Questions</a> •
   <a href="#additional-datasets-">Additional Datasets</a> •
@@ -12,7 +11,6 @@ when worlds collide”
   <a href="#timeline-">Timeline</a> •
   <a href="#team-organization-">Team Organization</a>
 </p>
-<br>
 
 ## Abstract 📌
 
