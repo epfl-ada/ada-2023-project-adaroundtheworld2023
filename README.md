@@ -23,7 +23,8 @@ and the success are linked in the movie industry.
 ## Research Questions 🔎
 
 Since we apply two different methods for uncovering the patterns 
-(see Methods), the research questions fall into two domains: 
+(see [Methods](https://github.com/epfl-ada/ada-2023-project-adaroundtheworld2023/tree/update-readme#methods-)), 
+the research questions fall into two domains: 
 (1) *Research Specific* and (2) *Comparison of Methods*.
 
 **Research Specific**. We will examine the relationship 
@@ -31,8 +32,8 @@ between “being at the intersection” and the success of a movie.
 The success is defined as the IMDB rating. Thus, we would like 
 to answer the following questions:
 
-- Is there a relationship between “being at the intersection of different genres” and the success of a movie? Do movies with more betweenness centrality (see Methods) have better IMDB ratings than the rest?
-- Maybe the dynamic is the opposite and movies that resemble any other are more successful? Therefore, do movies with smaller degree (see Methods) have better IMDB ratings than the rest?
+- Is there a relationship between “being at the intersection of different genres” and the success of a movie? Do movies with more betweenness centrality have better IMDB ratings than the rest?
+- Maybe the dynamic is the opposite and movies that resemble any other are more successful? Therefore, do movies with smaller degree have better IMDB ratings than the rest?
 
 **Comparison of Methods**. We will compare two approaches 
 described in Methods. The questions are as follows:
@@ -42,7 +43,7 @@ described in Methods. The questions are as follows:
 
 ## Additional Datasets 📚
 
-TDB
+[IMDB Movies](https://developer.imdb.com/non-commercial-datasets/) -  TBD.
 
 ## Methods 🎯
 
@@ -116,23 +117,27 @@ regression and dummy variables.
 
 ```
 .
-├── Week 8  - TBD
+├── Week 8  - Preprocessing
 │  
-├── Week 9  - TBD
+├── Week 9  - Embedding & classification
 │  
-├── Week 10 - TBD
+├── Week 10 - Homework 2
 │  
-├── Week 11 - TBD
+├── Week 11 - Graph generation & data story
 │  
-├── Week 12 - TBD
+├── Week 12 - Correlation analysis & data story
 │    
-├── Week 13 - TBD
+├── Week 13 - Github pages
 │  
-├── Week 14 - TBD
+├── Week 14 - Finalization
 .
 ```
 
-## Organization Within the Team 👬
+## Team Organization 👬
 
-TBD
+- **Nam**: 
+- **Valentin**:
+- **Paul**:
+- **Quentin**:
+- **Jan**:
 
