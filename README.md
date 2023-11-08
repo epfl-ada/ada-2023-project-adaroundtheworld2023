@@ -155,9 +155,9 @@ regression and dummy variables.
 
 ## Team Organization 👬
 
-- **Nam**: 
-- **Valentin**:
-- **Paul**:
-- **Quentin**:
-- **Jan**:
+- **Nam**: GitHub pages 
+- **Valentin**: preprocessing & network graph analysis
+- **Paul**: correlation analysis & data story
+- **Quentin**: NLI based text classification & data story
+- **Jan**: network graphs & data story
 
