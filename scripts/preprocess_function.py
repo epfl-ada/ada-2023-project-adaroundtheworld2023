@@ -32,7 +32,7 @@ def drop_duplicates(movies_df, movie_name_column, year_column, show=False):
     return movies_df.drop(columns=['id'])
 
 
-def preprocess_movie_metadata(drop_empty_genre=False):
+def preprocess_movie_metadata(movie_metadata_df,drop_empty_genre=False):
     ''' Function for preprocess of the moie metadata
 
     We preprocess the data from the movie.metadata.tsv file. we first transform the release_date into a year_release column in string format
@@ -42,6 +42,9 @@ def preprocess_movie_metadata(drop_empty_genre=False):
     
     Parameters
     ----------
+    movie_metadata_df: pandas.DataFrame
+        DataFrame containing the movies metadata
+
     drop_empty_genre: bool (to drop the movies without genres)
 
     Returns
@@ -50,9 +53,7 @@ def preprocess_movie_metadata(drop_empty_genre=False):
         The movies_df DataFrame preprocess acording to our needs
     '''
 
-    ######load data movie metadata
-    column_names = ['wikipedia_id', 'freebase_id', 'name', 'release_date', 'box_office_revenue', 'runtime', 'languages', 'countries', 'genres']
-    movie_metadata_df = pd.read_table('../data/movie.metadata.tsv', names=column_names)
+    
     
     # Transform relase_date into a year_release column in string format
     movie_metadata_df_preprocess = movie_metadata_df.dropna(subset=['release_date']).copy()
@@ -81,13 +82,16 @@ def preprocess_movie_metadata(drop_empty_genre=False):
     return movie_metadata_df_preprocess
 
 
-def preprocess_full(drop_empty_genre=False):
+def preprocess_full(path_to_data, drop_empty_genre=False):
     ''' Function doing all the preprocess of the data in order the retrieve the final dataframe
 
    We first preprocess the data from the movie.metadata.tsv file. then we merge it with the plot_summaries.txt file to keep only the movies with a plot.
    finaly we add the imdb ratings to the dataframe. keeping only the movies with a rating and a number of votes.
     Parameters
     ----------
+    path_to_data: str
+        The path to the data folder we suppose that the folder contains the following files: movie.metadata.tsv, plot_summaries.txt, titles.tsv, ratings.tsv
+
     drop_empty_genre: bool (to drop the movies without genres)
 
 
@@ -97,17 +101,21 @@ def preprocess_full(drop_empty_genre=False):
         The movies_df DataFrame preprocess acording to our needs
     '''
     print('Preprocessing movie metadata...', end=' ')
-    movie_metadata_df = preprocess_movie_metadata(drop_empty_genre)
+    ######load data movie metadata
+    column_names = ['wikipedia_id', 'freebase_id', 'name', 'release_date', 'box_office_revenue', 'runtime', 'languages', 'countries', 'genres']
+    movie_df = pd.read_table(path_to_data +'movie.metadata.tsv', names=column_names)
+    movie_metadata_df = preprocess_movie_metadata(movie_df,drop_empty_genre)
     print('Done')
 
+    ######### load data plot summaries
     plot_column_names = ['wikipedia_id', 'plot']
-    movie_plot_df = pd.read_csv('../data/plot_summaries.txt', sep="\t", names=plot_column_names)
+    movie_plot_df = pd.read_csv(path_to_data+'plot_summaries.txt', sep="\t", names=plot_column_names)
 
     # merge the two dataframe according to the wikipedia_id
     movie_metadata_plot_ = movie_metadata_df.merge(movie_plot_df, on='wikipedia_id', how='inner')
 
     # add the imdb ratings
-    movie_metadata_full = append_ratings(movie_metadata_df, '../data/data_imdb/', 'name', 'release_year', in_place=False)
+    movie_metadata_full = append_ratings(movie_metadata_df,path_to_data, 'name', 'release_year', in_place=False)
 
     # clean the data
     movie_metadata_full = movie_metadata_full.drop(columns=['tconst'])
