@@ -52,7 +52,14 @@ described in Methods. The questions are as follows:
 
 ## Additional Datasets 📚
 
-[IMDB Movies](https://developer.imdb.com/non-commercial-datasets/) -  TBD.
+In order to be able to discern between a "good" and a "bad" movie we need a quantifiable information available to all the movies (Or a big proportion of them). As 89% of revenue seems to be missing, another approach is to use ratings instead.  
+
+While ratings are not initially in the dataset, we can use the [IMDb Movies Dataset](https://developer.imdb.com/non-commercial-datasets/) in order to extend the current one with both average ratings and the number of voters (As just the average may not hold enough information).
+
+There isn't an exact id match, so we will use the (realease year, movie name) index for matching the existing dataset with the IMDb one. While this can still create duplicates, the number of remaining movies is enough for our analysis so we can just drop the duplicates.
+
+For the code to work the data folder must contain the following files named as such:
+[titles.tsv](https://datasets.imdbws.com/title.basics.tsv.gz) and [ratings.tsv](https://datasets.imdbws.com/title.ratings.tsv.gz)
 
 ## Methods 🎯
 
@@ -67,11 +74,6 @@ which varied by column, being either NaN or empty strings. The approach
 to missing data was tailored to the relevance of the information: 
 for example, box office revenue data, missing for 89% of entries, 
 was completely dropped. 
-
-**IMDB Ratings**. To add a measure of success for each movie, 
-IMDb ratings were incorporated. This required a common index between 
-the original dataset and the ratings dataset, which was constructed using 
-the movie name and release year.
 
 The analysis of the processed data can be found from preprocess.ipynb (TODO).
             
