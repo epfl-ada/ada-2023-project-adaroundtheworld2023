@@ -52,7 +52,7 @@ def preprocess_movie_metadata(drop_empty_genre=False):
 
     ######load data movie metadata
     column_names = ['wikipedia_id', 'freebase_id', 'name', 'release_date', 'box_office_revenue', 'runtime', 'languages', 'countries', 'genres']
-    movie_metadata_df = pd.read_table('../data/raw/movie.metadata.tsv', names=column_names)
+    movie_metadata_df = pd.read_table('../data/movie.metadata.tsv', names=column_names)
     
     # Transform relase_date into a year_release column in string format
     movie_metadata_df_preprocess = movie_metadata_df.dropna(subset=['release_date']).copy()
@@ -101,13 +101,13 @@ def preprocess_full(drop_empty_genre=False):
     print('Done')
 
     plot_column_names = ['wikipedia_id', 'plot']
-    movie_plot_df = pd.read_csv('../data/raw/plot_summaries.txt', sep="\t", names=plot_column_names)
+    movie_plot_df = pd.read_csv('../data/plot_summaries.txt', sep="\t", names=plot_column_names)
 
     # merge the two dataframe according to the wikipedia_id
     movie_metadata_plot_ = movie_metadata_df.merge(movie_plot_df, on='wikipedia_id', how='inner')
 
     # add the imdb ratings
-    movie_metadata_full = append_ratings(movie_metadata_df, '../data/raw/data_imdb/', 'name', 'release_year', in_place=False)
+    movie_metadata_full = append_ratings(movie_metadata_df, '../data/data_imdb/', 'name', 'release_year', in_place=False)
 
     # clean the data
     movie_metadata_full = movie_metadata_full.drop(columns=['tconst'])
