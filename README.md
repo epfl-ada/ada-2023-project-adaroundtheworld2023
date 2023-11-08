@@ -62,8 +62,19 @@ which will be generated using two different approaches.
 
 ### Preprocessing
 
-TBD
+**Movie Metadata**. In the preprocessing stage, the focus was on handling missing values, 
+which varied by column, being either NaN or empty strings. The approach 
+to missing data was tailored to the relevance of the information: 
+for example, box office revenue data, missing for 89% of entries, 
+was completely dropped. 
 
+**IMDB Ratings**. To add a measure of success for each movie, 
+IMDb ratings were incorporated. This required a common index between 
+the original dataset and the ratings dataset, which was constructed using 
+the movie name and release year.
+
+The analysis of the processed data can be found from preprocess.ipynb (TODO).
+            
 ### Analysis
 
 #### Step 1: Graph Generation
