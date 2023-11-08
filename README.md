@@ -62,13 +62,18 @@ which will be generated using two different approaches.
 
 ### Preprocessing
 
-In the preprocessing stage, the focus was on handling missing values, which varied by column, being either NaN or empty strings. The approach to missing data was tailored to the relevance of the information; for example, box office revenue data, missing for 89% of entries, was completely dropped. To add a measure of quality to each movie, IMDb ratings were incorporated. This required a common index between the original dataset and the ratings dataset, which was constructed using the movie name and release year. However, this led to some duplicate entries—235 in the original dataset and a few thousand in the ratings dataset. To facilitate a clean merge, all duplicates were removed, resulting in a loss of only a few hundred movies. This was deemed acceptable given that the final dataset contained approximately 36,000 movies. Before merging, important parameters with NaN values, such as release date, were cleaned of their Nan values, dropping the movies without values for the release.
+**Movie Metadata**. In the preprocessing stage, the focus was on handling missing values, 
+which varied by column, being either NaN or empty strings. The approach 
+to missing data was tailored to the relevance of the information: 
+for example, box office revenue data, missing for 89% of entries, 
+was completely dropped. 
 
-Post-preprocessing, the data was analyzed to understand the distribution of genres, ratings, and movie release years. Those analyse can be etrieve in the preprocess notebook. 
+**IMDB Ratings**. To add a measure of success for each movie, 
+IMDb ratings were incorporated. This required a common index between 
+the original dataset and the ratings dataset, which was constructed using 
+the movie name and release year.
 
-PS: To run the code you must add a data folder with the files movie.metadata.tsv, plot_summaries.txt, titles.tsv, ratings.tsv. Ratings and titles can be found in the folowing(With the respective name):
-            - titles.tsv ([name.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz))
-            - ratings.tsv ([title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz))
+The analysis of the processed data can be found from preprocess.ipynb (TODO).
             
 ### Analysis
 
