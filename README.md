@@ -52,7 +52,14 @@ described in Methods. The questions are as follows:
 
 ## Additional Datasets 📚
 
-[IMDB Movies](https://developer.imdb.com/non-commercial-datasets/) -  TBD.
+In order to be able to discern between a "good" and a "bad" movie we need quantifiable 
+information available to all the movies (Or a big proportion of them). As 89% of 
+revenue seems to be missing, another approach is to use ratings instead.  
+
+While ratings are not initially in the dataset, we can use the 
+[IMDb Movies Dataset](https://developer.imdb.com/non-commercial-datasets/) 
+in order to extend the current one with both average ratings and the number 
+of voters (As just the average may not hold enough information).
 
 ## Methods 🎯
 
@@ -62,16 +69,24 @@ which will be generated using two different approaches.
 
 ### Preprocessing
 
-In the preprocessing stage, the focus was on handling missing values, which varied by column, being either NaN or empty strings. The approach to missing data was tailored to the relevance of the information; for example, box office revenue data, missing for 89% of entries, was completely dropped. To add a measure of quality to each movie, IMDb ratings were incorporated. This required a common index between the original dataset and the ratings dataset, which was constructed using the movie name and release year. However, this led to some duplicate entries—235 in the original dataset and a few thousand in the ratings dataset. To facilitate a clean merge, all duplicates were removed, resulting in a loss of only a few hundred movies. This was deemed acceptable given that the final dataset contained approximately 36,000 movies. Before merging, important parameters with NaN values, such as release date, were cleaned of their Nan values, dropping the movies without values for the release.
+**Movie Metadata**. In the preprocessing stage, the focus was on handling missing values, 
+which varied by column, being either NaN or empty lists. The approach 
+to missing data was tailored to the relevance of the information: 
+for example, box office revenue data, missing for 89% of entries, 
+was completely dropped. 
 
-Post-preprocessing, the data was analyzed to understand the distribution of genres, ratings, and movie release years. Those analyse can be etrieve in the preprocess notebook. 
+**Plot Summaries**. As the analysis is mostly based on summaries of the plots,
+they will be merged with the metadata.
 
-PS: To run the code you must add a data folder with the files movie.metadata.tsv, plot_summaries.txt, titles.tsv, ratings.tsv. Ratings and titles can be found in the folowing(With the respective name):
-            - titles.tsv ([name.basics.tsv.gz](https://datasets.imdbws.com/title.basics.tsv.gz))
-            - ratings.tsv ([title.ratings.tsv.gz](https://datasets.imdbws.com/title.ratings.tsv.gz))
+**IMDB Ratings**. To add a measure of success for each movie, 
+IMDb ratings will also be merged with the dataset. 
+There isn't an exact id match, so we will use the (`release year`, `movie name`) 
+index for matching the existing dataset with the IMDb one. While this can 
+still create duplicates, the number of remaining movies is enough for our 
+analysis. Thus, the duplicates will be dropped.
 
-### Analysis
-
+The analysis of the processed data can be found from [preprocess.ipynb](notebooks/preprocess.ipynb).
+            
 ### Analysis
 
 #### Step 1: Graph Generation
@@ -152,9 +167,9 @@ regression and dummy variables.
 
 ## Team Organization 👬
 
-- **Nam**: 
-- **Valentin**:
-- **Paul**:
-- **Quentin**:
-- **Jan**:
+- **Nam**: GitHub pages 
+- **Valentin**: preprocessing & network graph analysis
+- **Paul**: correlation analysis & data story
+- **Quentin**: NLI based text classification & data story
+- **Jan**: network graphs & data story
 
