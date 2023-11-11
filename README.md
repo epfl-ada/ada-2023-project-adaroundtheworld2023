@@ -70,7 +70,7 @@ which will be generated using two different approaches.
 ### Preprocessing
 
 **Movie Metadata**. In the preprocessing stage, the focus was on handling missing values, 
-which varied by column, being either NaN or empty strings. The approach 
+which varied by column, being either NaN or empty lists. The approach 
 to missing data was tailored to the relevance of the information: 
 for example, box office revenue data, missing for 89% of entries, 
 was completely dropped. 
@@ -85,7 +85,7 @@ index for matching the existing dataset with the IMDb one. While this can
 still create duplicates, the number of remaining movies is enough for our 
 analysis. Thus, the duplicates will be dropped.
 
-The analysis of the processed data can be found from preprocess.ipynb (TODO).
+The analysis of the processed data can be found from [preprocess.ipynb](notebooks/preprocess.ipynb).
             
 ### Analysis
 
