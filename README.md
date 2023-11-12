@@ -37,14 +37,14 @@ the research questions fall into two domains:
 (1) *Research Specific* and (2) *Comparison of Methods*.
 
 **Research Specific**. We will examine the relationship 
-between “being at the intersection” and the success of a movie. 
+between “_**being at the intersection**_” and the success of a movie. 
 The success is defined as the IMDB rating. Being at the intersection 
 will be a bit more challenging to quantify, but we decided to use a 
 metric called "betweenness centrality" (see more detailed description 
 in [Metrics](#step-2-metrics)). The intuition here would be that the 
 movies that have high betweenness measure would be similar to different 
 clusters... in other words, they would entail different genres. 
-The opposite to the betweenness would be degree (see [Metrics](#step-2-metrics)).
+The opposite to the betweenness would be "_**degree**_" (see [Metrics](#step-2-metrics)).
 A movie with a high degree would be similar to many other movies, possibly in
 one domain and would then be one-genre-specific. Therefore, 
 we would like to answer the following questions:
@@ -108,8 +108,8 @@ them. For this two different approaches will be used.
 model [[2](https://arxiv.org/pdf/2212.03533.pdf)] to turn the 
 movie plots into vectors and find the similarity 
 between them by using matrix multiplication. We can then specify a 
-threshold for the similarity to generate a graph, where more similar 
-plots will be clustered.
+threshold for the similarity to generate a graph. See the first endeavours 
+in [embedding.ipynb](notebooks/embedding.ipynb)
 
 **NLI-based Text Classification**. As an alternative approach, we will let 
 the LLM predict the probability that the plot belongs to any of the 
