@@ -20,7 +20,10 @@ def get_embedding(text: str, model) -> np.ndarray:
     :param model: update. For embedding.
     :return: Embeddings.
     """
-    phrases_list = list(set(re.findall('[^!?。.？！]+[!?。.？！]?', text)))
-    return np.mean(model.encode(phrases_list, normalize_embeddings=True), axis=0)
+    input_template = 'query: {}'
+    phrases = list(set(re.findall('[^!?。.？！]+[!?。.？！]?', text)))
+    phrases_formatted = [input_template.format(phrase) for phrase in phrases]
+    return np.mean(model.encode(phrases_formatted, normalize_embeddings=True), axis=0)
+
 
 
