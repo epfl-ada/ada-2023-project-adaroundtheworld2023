@@ -161,6 +161,3 @@ cython_debug/
 
 # Playground for jupyter notebooks to test things out
 /playground/*
-
-# Folder for storing the dataset
-/data/*
