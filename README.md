@@ -50,7 +50,7 @@ one domain and would then be one-genre-specific. Therefore,
 we would like to answer the following questions:
 
 - Is there a relationship between “being at the intersection of different genres” and the success of a movie? Do movies with more betweenness centrality have better IMDB ratings than the rest?
-- Maybe the dynamic is the opposite and movies that resemble any other are more successful? Therefore, do movies with smaller degree have better IMDB ratings than the rest?
+- Maybe it's opposite and movies that do not resemble to many others are more successful? Therefore, do movies with smaller degree have better IMDB ratings than the rest?
 
 **Comparison of Methods**. We will compare two approaches 
 described in [Graph Generation](#step-1-graph-generation). One uses
@@ -63,8 +63,8 @@ the probability of belonging to different genres. The questions are as follows:
 ## Additional Datasets 📚
 
 In order to be able to discern between a "good" and a "bad" movie we need quantifiable 
-information available to all the movies (Or a big proportion of them). As 89% of 
-revenue seems to be missing, another approach is to use ratings instead.  
+information available to all the movies (or a big proportion of them). As 89% of 
+revenue seems to be missing, we'll use ratings instead.  
 
 While ratings are not initially in the dataset, we can use the 
 [IMDb Movies Dataset](https://developer.imdb.com/non-commercial-datasets/) 
@@ -102,21 +102,21 @@ The analysis of the processed data can be found from [preprocess.ipynb](notebook
 #### Step 1: Graph Generation
 
 As analysis relies on the network graphs, we first need to generate 
-them. For this two different approaches will be used.
+them. For that purpose, two different approaches will be used.
 
 **Embedding Models and Similarity**. We are going to use an embedding 
 model [[2](https://arxiv.org/pdf/2212.03533.pdf)] to turn the 
 movie plots into vectors and find the similarity 
 between them by using matrix multiplication. We can then specify a 
 threshold for the similarity to generate a graph. See the first endeavours 
-in [embedding.ipynb](notebooks/embedding.ipynb)
+in [embedding.ipynb](notebooks/embedding.ipynb).
 
 **NLI-based Text Classification**. As an alternative approach, we will let 
 the LLM predict the probability that the plot belongs to any of the 
 genres [[3](https://arxiv.org/pdf/1909.00161.pdf)]. Although we already have a set of genres specified for every 
 movie, (1) this might depend on the data collection and by using models, 
 we can (2) limit the genre space and (3) turn the discrete list of genres 
-into probabilities. We will then again set the threshold and generate a 
+into probabilities. We will then again set the probability threshold and generate a 
 graph that will be used in the following analysis.
 
 #### Step 2: Metrics
@@ -135,10 +135,9 @@ $(s, t)$-paths, and $\sigma (s, t | v)$ is the number of those paths
 passing through some node $V$ other than $s, t$.
 
 Alternatively, we can take a slightly different approach and focus not 
-only on the intersections but look at the relationship between “being a 
-mix of different plots” and success. We will quantify the “mix of 
-different plots” by degree of the node. The degree of a node is the 
-number of edges connected to the node.
+only on the intersections but look at the plots that are simply similar 
+to many others. This can easily be quantified by the degree of the node, i.e. 
+the number of edges connected to the node.
 
 #### Step 3: Analysis
 
