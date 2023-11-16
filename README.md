@@ -81,9 +81,7 @@ which will be generated using two different approaches.
 
 **Movie Metadata**. In the preprocessing stage, the focus was on handling missing values, 
 which varied by column, being either NaN or empty lists. The approach 
-to missing data was tailored to the relevance of the information: 
-for example, box office revenue data, missing for 89% of entries, 
-was completely dropped. 
+to missing data was tailored to the relevance of the information. 
 
 **Plot Summaries**. As the analysis is mostly based on summaries of the plots,
 they will be merged with the metadata.
@@ -91,9 +89,7 @@ they will be merged with the metadata.
 **IMDB Ratings**. To add a measure of success for each movie, 
 IMDb ratings will also be merged with the dataset. 
 There isn't an exact id match, so we will use the (`release year`, `movie name`) 
-index for matching the existing dataset with the IMDb one. While this can 
-still create duplicates, the number of remaining movies is enough for our 
-analysis. Thus, the duplicates will be dropped.
+index for matching the existing dataset with the IMDb one.
 
 The analysis of the processed data can be found from [preprocess.ipynb](notebooks/preprocess.ipynb).
             
