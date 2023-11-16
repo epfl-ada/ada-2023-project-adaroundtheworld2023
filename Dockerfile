@@ -9,8 +9,8 @@ COPY requirements.txt ./
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements.txt
 
-COPY . .
+COPY . ./app
 
 EXPOSE 8501
 
-ENTRYPOINT ["streamlit", "run", "site/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "app/app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
