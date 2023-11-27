@@ -3,7 +3,7 @@
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$(dirname "$CURRENT_DIR")"
 
-cd "$ROOT_DIR/data/embeddings/"
+cd "$ROOT_DIR/data/embeddings/plots/"
 
 # define ID-s in Google Drive
 declare -A hashtable
