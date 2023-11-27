@@ -1,6 +1,8 @@
 """helpers.py: helper functions for notebooks"""
 import json
+import os
 import re
+from pathlib import Path
 
 import numpy as np
 
@@ -26,4 +28,39 @@ def get_embedding(text: str, model) -> np.ndarray:
     return np.mean(model.encode(phrases_formatted, normalize_embeddings=True), axis=0)
 
 
+def get_embeddings_from_json(year: int) -> dict:
+    """
+    Return the dictionary with all embeddings (as numpy arrays) for the decade.
+        Decades could be from 1900 to 2010.
 
+    :param year: start of the decade
+    :return: dict with key as movie ID and value as embedding.
+    """
+    root_path = Path(__file__).parent.parent
+    filepath = os.path.join(root_path, 'data', 'embeddings', 'plots',  f'plots_{year}s.json')
+
+    # read the file
+    with open(filepath, 'r') as f:
+        data = json.load(f)
+
+    # convert all lists to vectors and string keys to int
+    return {int(key): np.array(value) for key, value in data.items()}
+
+
+def get_similarities_from_json(year: int) -> dict:
+    """
+    Return the dictionary with all the similarities between the movies for the decade.
+        Decades could be from 1900 to 2010.
+
+    :param year: start of the decade
+    :return: dict with key as tuple of (id_movie_1, id_movie_2): similarity score
+    """
+    root_path = Path(__file__).parent.parent
+    filepath = os.path.join(root_path, 'data', 'embeddings', 'similarities', f'similarities_{year}s.json')
+
+    # read the file
+    with open(filepath, 'r') as f:
+        data = json.load(f)
+
+    # convert string key to tuple of integers
+    return {tuple([int(movie) for movie in key.split('-')]): value for key, value in data.items()}
