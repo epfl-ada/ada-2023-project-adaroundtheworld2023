@@ -1,10 +1,13 @@
 """helpers.py: helper functions for notebooks"""
+import itertools
 import json
 import os
+import random
 import re
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 
 def get_list_from_string_dict(value: str) -> list:
@@ -64,3 +67,30 @@ def get_similarities_from_json(year: int) -> dict:
 
     # convert string key to tuple of integers
     return {tuple([int(movie) for movie in key.split('-')]): value for key, value in data.items()}
+
+
+def get_similarity_df(movie_df: pd.DataFrame, similarities: dict, movie_count: int, seed: int = 23):
+    movies = list(set(itertools.chain(*similarities.keys())))
+
+    random.seed(seed)
+    subsample_movies = random.sample(movies, movie_count)
+    subsample_combinations = list(itertools.combinations(subsample_movies, 2))
+
+    similarity_df = pd.DataFrame(columns=['movie_1', 'movie_2', 'similarity'], dtype=float)
+
+    for id_1, id_2 in subsample_combinations:
+
+        if id_1 == id_2:
+            similarity_df.loc[len(similarity_df)] = [movie_df.loc[id_1]['name'], movie_df.loc[id_2]['name'], 100]
+            continue
+
+        try:
+            similarity = similarities[(id_1, id_2)]
+        except KeyError:
+            similarity = similarities[(id_2, id_1)]
+
+        similarity_df.loc[len(similarity_df)] = [
+            movie_df.loc[id_1]['name'], movie_df.loc[id_2]['name'], similarity
+        ]
+
+    return similarity_df
