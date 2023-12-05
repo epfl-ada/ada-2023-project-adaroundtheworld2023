@@ -2,12 +2,15 @@
 import itertools
 import json
 import os
+import pickle
 import random
 import re
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import networkx as nx
+import functools as ft
 
 
 def get_list_from_string_dict(value: str) -> list:
@@ -94,3 +97,38 @@ def get_similarity_df(movie_df: pd.DataFrame, similarities: dict, movie_count: i
         ]
 
     return similarity_df
+
+
+def get_graph_from_pickle(year: int):
+    """
+    Return the graph object for the decade. Decades could be from 1900 to 2010.
+
+    :param year: start of the decade
+    :return: networkx graph object
+    """
+    root_path = Path(__file__).parent.parent
+    filepath = os.path.join(root_path, 'data', 'embeddings', 'graphs', f'{year}s.gpickle')
+
+    # read the file
+    with open(filepath, 'rb') as f:
+        return pickle.load(f)
+
+
+def merge_graph_to_df(df: pd.DataFrame, graph) -> pd.DataFrame:
+    """
+    Add betweenness and degree to the df and only keep the columns with nodes.
+
+    :param df: with preprocessed data and wikipedia_id as index
+    :param graph: networkx object
+    :return: df with betweenness and degree
+    """
+    betweenness = nx.get_node_attributes(graph, "betweenness")
+    betweenness = {int(key): value for key, value in betweenness.items()}
+    betweenness_df = pd.DataFrame.from_dict(betweenness, orient='index').rename(columns={0: 'betweenness'})
+
+    degree = nx.get_node_attributes(graph, "degree")
+    degree = {int(key): value for key, value in degree.items()}
+    degree_df = pd.DataFrame.from_dict(degree, orient='index').rename(columns={0: 'degree'})
+
+    dfs = [df, betweenness_df, degree_df]
+    return ft.reduce(lambda left, right: pd.merge(left, right, left_index=True, right_index=True), dfs)
