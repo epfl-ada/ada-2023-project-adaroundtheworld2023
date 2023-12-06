@@ -1,13 +1,14 @@
 const nodes = node_dict;
 const edges = edges_dict;
-let selected_release_years = cb_obj.value;
+let lowerBound = cb_obj.value[0];
+let upperBound = cb_obj.value[1];
 
 // Update the nodes source with nodes filtered by the selected release date
 
 const indices = [];
 const wikipediaIds = [];
 for (let i = 0; i < nodes['release_year'].length; i++) {
-    if (selected_release_years.includes(nodes['release_year'][i].toString())) {
+    if (nodes['rating'][i] >= lowerBound && nodes['rating'][i] <= upperBound) {
         indices.push(i);
         wikipediaIds.push(nodes['wikipedia_id'][i]);
     }

@@ -2,21 +2,29 @@
 plotting.py: helper functions for plotting.
 
 * If you want to save bokeh plot into html:
-    output_file('<name>.html', mode='inline')
+    from bokeh.plotting import output_file, save
+    output_file('<name>.html')
     save(plot)
 """
+import os
 import warnings
 
 from math import pi
+from pathlib import Path
+from typing import Union
+
 import networkx as nx
+import numpy as np
 import pandas as pd
 from networkx.classes.graph import Graph
 
-from bokeh.io import output_notebook, curdoc
-from bokeh.plotting import figure, from_networkx
-from bokeh.models import Circle, MultiLine, BasicTicker
+from bokeh import events
+from bokeh.io import output_notebook
+from bokeh.plotting import figure, from_networkx, curdoc
+from bokeh.models import Circle, MultiLine, BasicTicker, CustomJS, NodesAndLinkedEdges, RangeSlider, InlineStyleSheet
 from bokeh.transform import linear_cmap
-from bokeh.palettes import cividis
+from bokeh.palettes import cividis, viridis
+from bokeh.layouts import column
 
 warnings.filterwarnings('ignore')
 
@@ -71,6 +79,7 @@ def plot_example_graph(graph: Graph, color_attribute: str, **figure_kwargs):
 
     plot.axis.visible = False
     plot.grid.visible = False
+    plot.outline_line_color = None
 
     # generate bokeh object from networkx
     network_graph = from_networkx(graph, layout_function=nx.spring_layout, scale=10)
@@ -153,7 +162,7 @@ def plot_bokeh_histogram(df: pd.DataFrame, group_col: str, **figure_kwargs):
 
     :param df: with the processed and merged movie data
     :param group_col: column used for group_by
-    :param figure_kwargs: for Jekyll {'sizing_mode':'stretch_width', 'height'=450}
+    :param figure_kwargs: for Jekyll: {'sizing_mode':'stretch_width', 'height':450}
     :return:
     """
     curdoc().theme = 'light_minimal'
@@ -166,6 +175,8 @@ def plot_bokeh_histogram(df: pd.DataFrame, group_col: str, **figure_kwargs):
 
     # get count per group_col
     count_series = df.groupby(group_col).name.count().rename('count')
+    count_series.index = count_series.index.astype(object)
+    count_series = count_series.shift(-1)
 
     # specify bins and frequency
     bins = count_series.index.to_series().reset_index(drop=True)
@@ -178,5 +189,126 @@ def plot_bokeh_histogram(df: pd.DataFrame, group_col: str, **figure_kwargs):
 
     plot.y_range.start = 0
     plot.yaxis.axis_label = "Frequency"
+    plot.xaxis.axis_label = "Year"
 
     return plot
+
+
+def _get_rangeslider(bokeh_graph):
+    """
+    Return the rangeslider with IMDB rating as the filtering value.
+
+    :param bokeh_graph: instance of bokeh graph
+    :return: range slider object
+    """
+    # get callback javascript file
+    js_file_path = os.path.join(Path(__file__).parent, 'bokeh_callback.js')
+    with open(js_file_path, 'r') as js_file:
+        js_callback = js_file.read()
+
+    range_slider = RangeSlider(start=0, end=10, value=(1, 9), step=.25, title="IMDB Rating")
+
+    input_feats = {
+        'graph': bokeh_graph,
+        'node_dict': bokeh_graph.node_renderer.data_source.data.copy(),
+        'edges_dict': bokeh_graph.edge_renderer.data_source.data.copy()
+    }
+
+    # Create a callback function to update the plot based on the selected release date
+    callback = CustomJS(args=input_feats, code=js_callback)
+
+    # Attach the callback to the slider
+    range_slider.js_on_change('value', callback)
+    curdoc().on_event(events.DocumentReady, callback)
+
+    return range_slider
+
+
+def plot_bokeh_graph(
+        graph,
+        color_attribute: str = 'degree',
+        size_attribute: str = 'adjusted_node_size',
+        **figure_kwargs
+):
+    """
+    Plot bokeh graph with stylized nodes and slider with IMDB ratings.
+
+    :param graph: networkx instance
+    :param color_attribute: attribute of graph that will be used for coloring the nodes
+    :param size_attribute: attribute of graph that will be used for sizing the nodes
+    :param figure_kwargs: {sizing_mode: 'stretch_both'} for website
+    :return: bokeh plot
+    """
+    curdoc().theme = 'light_minimal'
+    color_palette = viridis(256)
+
+    # establish which categories will appear when hovering over each node
+    tooltips = [
+        ("Name", "@name"),
+        ("Release year", "@release_year"),
+        ("Rating", "@rating{0.0}"),
+        ("Degree", "@degree{0}"),
+        ("Betweenness", "@betweenness{0.00}"),
+    ]
+
+    # create a plot — set dimensions, toolbar, and title
+    plot = figure(
+        tooltips=tooltips,
+        toolbar_location=None,
+        tools="pan,wheel_zoom,tap",
+        active_scroll='wheel_zoom',
+        **figure_kwargs
+    )
+
+    plot.axis.visible = False
+    plot.grid.visible = False
+    plot.outline_line_color = None
+
+    # create a network graph object with spring layout
+    bokeh_graph = from_networkx(graph, nx.spring_layout, scale=10)
+
+    # set node sizes and colors according to node degree (color as spectrum of color palette)
+    node_attributes = bokeh_graph.node_renderer.data_source.data
+    attribute = node_attributes[color_attribute]
+    colormap = linear_cmap(color_attribute, color_palette, min(attribute), max(attribute))
+
+    bokeh_graph.node_renderer.glyph = Circle(size=size_attribute, fill_color=colormap)
+
+    # set edge opacity and width
+    bokeh_graph.edge_renderer.glyph = MultiLine(line_alpha=0.3, line_width=1, line_color="#CCCCCC")
+    bokeh_graph.edge_renderer.selection_glyph = MultiLine(line_alpha=1, line_width=1.3, line_color="#F0610F")
+
+    bokeh_graph.selection_policy = NodesAndLinkedEdges()
+    bokeh_graph.inspection_policy = NodesAndLinkedEdges()
+
+    # add network graph to the plot
+    plot.renderers.append(bokeh_graph)
+
+    unique_years = [str(int(year)) for year in np.unique(node_attributes['release_year']).tolist()]
+    widget = _get_rangeslider(bokeh_graph)
+
+    stylesheet = InlineStyleSheet(css=".bk-RangeSlider { margin-left: auto; margin-right: auto }")
+
+    # Create a layout with the plot and the slider
+    return column(widget, plot, sizing_mode='stretch_width', height=700, stylesheets=[stylesheet])
+
+
+def plot_bokeh_histogram_w_threshold(frequency, bins, threshold):
+    """TODO: add comments"""
+    curdoc().theme = 'light_minimal'
+
+    plot = figure(
+        toolbar_location=None,
+        **{'sizing_mode': 'stretch_width', 'height': 450}
+    )
+
+    plot.quad(
+        top=frequency, bottom=0, left=bins[:-1], right=bins[1:],
+        fill_color=cividis(1)[0], line_color="white"
+    )
+
+    plot.vspan(x=threshold, line_width=3, line_color="red")
+
+    plot.y_range.start = 0
+    plot.yaxis.axis_label = "Frequency"
+    plot.xaxis.axis_label = "Cosine Similarity"
