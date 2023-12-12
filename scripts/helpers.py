@@ -31,7 +31,10 @@ def get_embedding(text: str, model) -> np.ndarray:
     input_template = 'query: {}'
     phrases = list(set(re.findall('[^!?。.？！]+[!?。.？！]?', text)))
     phrases_formatted = [input_template.format(phrase) for phrase in phrases]
-    return np.mean(model.encode(phrases_formatted, normalize_embeddings=True), axis=0)
+    mean_vector = np.mean(model.encode(phrases_formatted, normalize_embeddings=True), axis=0)
+    norm = np.linalg.norm(mean_vector)
+    return mean_vector / norm
+
 
 
 def get_embeddings_from_json(year: int) -> dict:
