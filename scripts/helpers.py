@@ -5,12 +5,14 @@ import os
 import pickle
 import random
 import re
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import networkx as nx
 import functools as ft
+
+from pathlib import Path
+from bokeh.models import ColumnDataSource, DataTable, TableColumn
 
 
 def get_list_from_string_dict(value: str) -> list:
@@ -155,9 +157,10 @@ def merge_graph_to_df(df: pd.DataFrame, graph) -> pd.DataFrame:
 
 def get_embeddings_from_proba(proba: dict) -> dict:
     """
-    TODO: update
-    :param proba:
-    :return:
+    Merge probabilities of genres and themes and normalize to unit vectors.
+
+    :param proba: dictionary with LLM results as dictionary.
+    :return: dictionary with "embeddings"
     """
     embedding_dict = {}
 
@@ -171,3 +174,14 @@ def get_embeddings_from_proba(proba: dict) -> dict:
         embedding_dict[key] = norm_embedding.squeeze()
 
     return embedding_dict
+
+
+def get_bokeh_table(df: pd.DataFrame):
+    """Convert pandas df to Bokeh's DataTable."""
+    source = ColumnDataSource(df)
+
+    cols = []
+    for col_name in df.columns:
+        cols.append(TableColumn(field=col_name, title=col_name))
+
+    return DataTable(source=source, columns=cols)
