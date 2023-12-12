@@ -72,6 +72,22 @@ def get_similarities_from_json(year: int) -> dict:
     return {tuple([int(movie) for movie in key.split('-')]): value for key, value in data.items()}
 
 
+def get_classification_from_json(year: int) -> dict:
+    """
+    Return the dictionary with all the classification values of the movies for the decade.
+        Decades could be from 1900 to 2010.
+
+    :param year: start of the decade
+    :return: dict with key wikipedia_id
+    """
+    root_path = Path(__file__).parent.parent
+    filepath = os.path.join(root_path, 'data', 'classification', 'plots', f'plots_{year}s.json')
+
+    # read the file
+    with open(filepath, 'r') as f:
+        return json.load(f)
+
+
 def get_similarity_df(movie_df: pd.DataFrame, similarities: dict, movie_count: int, seed: int = 23):
     movies = list(set(itertools.chain(*similarities.keys())))
 
@@ -132,3 +148,23 @@ def merge_graph_to_df(df: pd.DataFrame, graph) -> pd.DataFrame:
 
     dfs = [df, betweenness_df, degree_df]
     return ft.reduce(lambda left, right: pd.merge(left, right, left_index=True, right_index=True), dfs)
+
+
+def get_embeddings_from_proba(proba: dict) -> dict:
+    """
+    TODO: update
+    :param proba:
+    :return:
+    """
+    embedding_dict = {}
+
+    for key in proba.keys():
+        x = proba[key]
+        _, genres = zip(*sorted(zip(x['genres']['labels'], x['genres']['scores'])))
+        _, themes = zip(*sorted(zip(x['themes']['labels'], x['themes']['scores'])))
+
+        embedding = np.array(genres + themes)
+        norm_embedding = embedding / np.linalg.norm(embedding)
+        embedding_dict[key] = norm_embedding.squeeze()
+
+    return embedding_dict

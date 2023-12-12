@@ -21,14 +21,15 @@ from networkx.classes.graph import Graph
 from bokeh import events
 from bokeh.io import output_notebook
 from bokeh.plotting import figure, from_networkx, curdoc
-from bokeh.models import Circle, MultiLine, BasicTicker, CustomJS, NodesAndLinkedEdges, RangeSlider, InlineStyleSheet
+from bokeh.models import (Circle, MultiLine, BasicTicker, CustomJS, NodesAndLinkedEdges,
+                          RangeSlider, InlineStyleSheet, ColumnDataSource, Slope)
 from bokeh.transform import linear_cmap
-from bokeh.palettes import cividis, viridis
+from bokeh.palettes import cividis, viridis, Cividis10, Sunset10
 from bokeh.layouts import column
 
 warnings.filterwarnings('ignore')
 
-output_notebook()
+# output_notebook()
 
 
 def _generate_plottable_graph(graph: Graph):
@@ -228,6 +229,7 @@ def plot_bokeh_graph(
         graph,
         color_attribute: str = 'degree',
         size_attribute: str = 'adjusted_node_size',
+        layout = nx.spring_layout,
         **figure_kwargs
 ):
     """
@@ -265,7 +267,7 @@ def plot_bokeh_graph(
     plot.outline_line_color = None
 
     # create a network graph object with spring layout
-    bokeh_graph = from_networkx(graph, nx.spring_layout, scale=10)
+    bokeh_graph = from_networkx(graph, layout, scale=10)
 
     # set node sizes and colors according to node degree (color as spectrum of color palette)
     node_attributes = bokeh_graph.node_renderer.data_source.data
@@ -275,8 +277,12 @@ def plot_bokeh_graph(
     bokeh_graph.node_renderer.glyph = Circle(size=size_attribute, fill_color=colormap)
 
     # set edge opacity and width
-    bokeh_graph.edge_renderer.glyph = MultiLine(line_alpha=0.3, line_width=1, line_color="#CCCCCC")
-    bokeh_graph.edge_renderer.selection_glyph = MultiLine(line_alpha=1, line_width=1.3, line_color="#F0610F")
+    bokeh_graph.edge_renderer.glyph = MultiLine(
+        line_alpha=0.3, line_width=1, line_color="#CCCCCC"
+    )
+    bokeh_graph.edge_renderer.selection_glyph = MultiLine(
+        line_alpha=1, line_width=1.3, line_color="#F0610F"
+    )
 
     bokeh_graph.selection_policy = NodesAndLinkedEdges()
     bokeh_graph.inspection_policy = NodesAndLinkedEdges()
@@ -284,10 +290,10 @@ def plot_bokeh_graph(
     # add network graph to the plot
     plot.renderers.append(bokeh_graph)
 
-    unique_years = [str(int(year)) for year in np.unique(node_attributes['release_year']).tolist()]
     widget = _get_rangeslider(bokeh_graph)
 
-    stylesheet = InlineStyleSheet(css=".bk-RangeSlider { margin-left: auto; margin-right: auto }")
+    custom_css = ".bk-RangeSlider { margin-left: auto; margin-right: auto }"
+    stylesheet = InlineStyleSheet(css=custom_css)
 
     # Create a layout with the plot and the slider
     return column(widget, plot, sizing_mode='stretch_width', height=700, stylesheets=[stylesheet])
@@ -312,3 +318,49 @@ def plot_bokeh_histogram_w_threshold(frequency, bins, threshold):
     plot.y_range.start = 0
     plot.yaxis.axis_label = "Frequency"
     plot.xaxis.axis_label = "Cosine Similarity"
+
+
+def plot_bokeh_scatter(df: pd.DataFrame, x: str, slope: float, intercept: float):
+    """
+    TODO: update
+    :param df:
+    :param x:
+    :param slope:
+    :param intercept:
+    :return:
+    """
+    curdoc().theme = 'light_minimal'
+
+    blue, yellow = Cividis10[0], Sunset10[5]
+
+    source = ColumnDataSource(df)
+
+    plot = figure(
+        sizing_mode='stretch_width', height=450,
+        toolbar_location=None,
+        x_axis_label='degree',
+        y_axis_label='rating',
+        tooltips=[
+            ("Name", "@name"),
+            ("Release year", "@release_year"),
+            ('Rating', '@rating{0.0}'),
+            ("Degree", "@degree{0}"),
+            ("Betweenness", "@betweenness{0.00}")
+        ]
+    )
+
+    plot.y_range.start = 0
+
+    plot.circle(
+        x, 'rating', source=source, size=8,
+        alpha=0.7, fill_color=yellow, line_color="black"
+    )
+
+    slope = Slope(
+        gradient=slope, y_intercept=intercept,
+        line_color=blue, line_dash='dashed', line_width=3
+    )
+
+    plot.add_layout(slope)
+
+    return plot
