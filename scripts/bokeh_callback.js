@@ -27,9 +27,11 @@ Object.keys(nodes).forEach(key => {
 const filteredEdges = {};
 
 Object.keys(edges).forEach(key => {
+    console.log(edges[key])
     filteredEdges[key] = edges[key].filter((value, index) =>
-        wikipediaIds.includes(edges['start'][index]) &&
-        wikipediaIds.includes(edges['end'][index])
+        (wikipediaIds.includes(edges['start'][index]) && wikipediaIds.includes(edges['end'][index]))
+        ||
+        (indices.includes(edges['start'][index]) && indices.includes(edges['end'][index]))
     );
 });
 
