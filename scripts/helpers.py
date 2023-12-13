@@ -176,6 +176,24 @@ def get_embeddings_from_proba(proba: dict) -> dict:
     return embedding_dict
 
 
+def get_probabilities_from_json(year: int) -> dict:
+    """
+    Return the dictionary with all the genre probabilities between the movies for the decade.
+        Decades could be from 1900 to 2010.
+
+    :param year: start of the decade
+    :return: dict with key as movie ID and value as the probability for each genre and theme.
+    """
+    root_path = Path(__file__).parent.parent
+    filepath = os.path.join(root_path, 'data', 'classification', 'probabilities', f'plots_{year}s.json')
+
+    # read the file
+    with open(filepath, 'r') as f:
+        data = json.load(f)
+
+    return data
+
+
 def get_bokeh_table(df: pd.DataFrame):
     """Convert pandas df to Bokeh's DataTable."""
     source = ColumnDataSource(df)
