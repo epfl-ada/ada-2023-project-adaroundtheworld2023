@@ -5,6 +5,7 @@ import os
 import pickle
 import random
 import re
+from typing import Callable
 
 import numpy as np
 import pandas as pd
@@ -38,8 +39,7 @@ def get_embedding(text: str, model) -> np.ndarray:
     return mean_vector / norm
 
 
-
-def get_embeddings_from_json(year: int) -> dict:
+def get_embeddings_from_json(year: int, approach: str) -> dict:
     """
     Return the dictionary with all embeddings (as numpy arrays) for the decade.
         Decades could be from 1900 to 2010.
@@ -48,7 +48,7 @@ def get_embeddings_from_json(year: int) -> dict:
     :return: dict with key as movie ID and value as embedding.
     """
     root_path = Path(__file__).parent.parent
-    filepath = os.path.join(root_path, 'data', 'embeddings', 'plots',  f'plots_{year}s.json')
+    filepath = os.path.join(root_path, 'data', 'embeddings', approach,  f'plots_{year}s.json')
 
     # read the file
     with open(filepath, 'r') as f:
@@ -58,16 +58,12 @@ def get_embeddings_from_json(year: int) -> dict:
     return {int(key): np.array(value) for key, value in data.items()}
 
 
-def get_similarities_from_json(year: int) -> dict:
+def get_similarities_from_json(decade: int, approach: str) -> dict:
     """
-    Return the dictionary with all the similarities between the movies for the decade.
-        Decades could be from 1900 to 2010.
-
-    :param year: start of the decade
-    :return: dict with key as tuple of (id_movie_1, id_movie_2): similarity score
+    TODO: update
     """
     root_path = Path(__file__).parent.parent
-    filepath = os.path.join(root_path, 'data', 'embeddings', 'similarities', f'similarities_{year}s.json')
+    filepath = os.path.join(root_path, 'data', 'similarities', approach, f'similarities_{decade}s.json')
 
     # read the file
     with open(filepath, 'r') as f:
@@ -86,7 +82,7 @@ def get_classification_from_json(year: int) -> dict:
     :return: dict with key wikipedia_id
     """
     root_path = Path(__file__).parent.parent
-    filepath = os.path.join(root_path, 'data', 'classification', 'plots', f'plots_{year}s.json')
+    filepath = os.path.join(root_path, 'data', 'classification', 'custom_genres', f'plots_{year}s.json')
 
     # read the file
     with open(filepath, 'r') as f:
@@ -120,15 +116,16 @@ def get_similarity_df(movie_df: pd.DataFrame, similarities: dict, movie_count: i
     return similarity_df
 
 
-def get_graph_from_pickle(year: int):
+def get_graph_from_pickle(year: int, approach: str):
     """
     Return the graph object for the decade. Decades could be from 1900 to 2010.
 
     :param year: start of the decade
+    :param approach: either 'embeddings', 'raw_genres' or 'custom_genres'
     :return: networkx graph object
     """
     root_path = Path(__file__).parent.parent
-    filepath = os.path.join(root_path, 'data', 'embeddings', 'graphs', f'{year}s.gpickle')
+    filepath = os.path.join(root_path, 'data', 'graphs', approach, f'{year}s.gpickle')
 
     # read the file
     with open(filepath, 'rb') as f:
@@ -174,24 +171,6 @@ def get_embeddings_from_genres_and_themes(proba: dict) -> dict:
         embedding_dict[key] = norm_embedding.squeeze()
 
     return embedding_dict
-
-
-def get_probabilities_from_json(year: int) -> dict:
-    """
-    Return the dictionary with all the genre probabilities between the movies for the decade.
-        Decades could be from 1900 to 2010.
-
-    :param year: start of the decade
-    :return: dict with key as movie ID and value as the probability for each genre and theme.
-    """
-    root_path = Path(__file__).parent.parent
-    filepath = os.path.join(root_path, 'data', 'classification', 'probabilities', f'plots_{year}s.json')
-
-    # read the file
-    with open(filepath, 'r') as f:
-        data = json.load(f)
-
-    return data
 
 
 def get_bokeh_table(df: pd.DataFrame):
