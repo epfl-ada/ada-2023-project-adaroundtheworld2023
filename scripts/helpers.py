@@ -155,7 +155,7 @@ def merge_graph_to_df(df: pd.DataFrame, graph) -> pd.DataFrame:
     return ft.reduce(lambda left, right: pd.merge(left, right, left_index=True, right_index=True), dfs)
 
 
-def get_embeddings_from_proba(proba: dict) -> dict:
+def get_embeddings_from_genres_and_themes(proba: dict) -> dict:
     """
     Merge probabilities of genres and themes and normalize to unit vectors.
 
@@ -203,3 +203,42 @@ def get_bokeh_table(df: pd.DataFrame):
         cols.append(TableColumn(field=col_name, title=col_name))
 
     return DataTable(source=source, columns=cols)
+
+
+def add_default_attributes(graph, df: pd.DataFrame):
+    """
+
+    :param graph:
+    :param df:
+    :return:
+    """
+
+    def _add_features_from_df(graph, df: pd.DataFrame, features: list):
+        """Helper function for adding features from df to graph."""
+        graph_df = df.set_index('wikipedia_id')
+
+        for feature in features:
+            ratings_dict = dict((id_, graph_df.loc[int(id_)][feature]) for id_ in graph.nodes)
+            nx.set_node_attributes(graph, name=feature, values=ratings_dict)
+
+        return graph
+
+    features_from_df = ['name', 'rating', 'release_year']
+    graph = _add_features_from_df(graph, df, features_from_df)
+
+    # add wikipedia id itself as an attribute
+    names = dict((id_, int(id_)) for id_ in graph.nodes)
+    nx.set_node_attributes(graph, name='wikipedia_id', values=names)
+
+    # calculate the betweenness centrality
+    betweenness = nx.betweenness_centrality(graph)
+    nx.set_node_attributes(graph, name='betweenness', values=betweenness)
+
+    log_betweenness = {key: np.log(value + 0.0001) for key, value in betweenness.items()}
+    nx.set_node_attributes(graph, name='log_betweenness', values=log_betweenness)
+
+    # calculate degree for each node
+    degrees = dict(nx.degree(graph))
+    nx.set_node_attributes(graph, name='degree', values=degrees)
+
+    return graph

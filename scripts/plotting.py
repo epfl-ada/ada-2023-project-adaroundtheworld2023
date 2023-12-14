@@ -250,7 +250,7 @@ def plot_bokeh_graph(
         ("Release year", "@release_year"),
         ("Rating", "@rating{0.0}"),
         ("Degree", "@degree{0}"),
-        ("Betweenness", "@betweenness{0.00}"),
+        ("Betweenness", "@betweenness{0.0000}"),
     ]
 
     # create a plot — set dimensions, toolbar, and title
