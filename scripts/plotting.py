@@ -228,8 +228,8 @@ def _get_rangeslider(bokeh_graph):
 def plot_bokeh_graph(
         graph,
         color_attribute: str = 'degree',
-        size_attribute: str = 'adjusted_node_size',
-        layout = nx.spring_layout,
+        size_attribute: Union[str, int] = 'adjusted_node_size',
+        layout=nx.spring_layout,
         **figure_kwargs
 ):
     """
@@ -238,6 +238,7 @@ def plot_bokeh_graph(
     :param graph: networkx instance
     :param color_attribute: attribute of graph that will be used for coloring the nodes
     :param size_attribute: attribute of graph that will be used for sizing the nodes
+    :param layout: used for changing the position of the nodes
     :param figure_kwargs: {sizing_mode: 'stretch_both'} for website
     :return: bokeh plot
     """
