@@ -132,25 +132,28 @@ def get_graph_from_pickle(year: int, approach: str):
         return pickle.load(f)
 
 
-def merge_graph_to_df(df: pd.DataFrame, graph) -> pd.DataFrame:
+def merge_graph_to_df(
+        df: pd.DataFrame,
+        graph,
+        features: list = ['betweenness', 'degree', 'log_betweenness']
+) -> pd.DataFrame:
     """
     Add betweenness and degree to the df and only keep the columns with nodes.
 
     :param df: with preprocessed data and wikipedia_id as index
     :param graph: networkx object
-    :return: df with betweenness and degree
+    :param features: attributes that must be extracted from the graph
+    :return: df with (log)betweenness and degree
     """
-    betweenness = nx.get_node_attributes(graph, "betweenness")
-    betweenness = {int(key): value for key, value in betweenness.items()}
-    betweenness_df = pd.DataFrame.from_dict(betweenness, orient='index').rename(columns={0: 'betweenness'})
+    dfs = [df]
 
-    degree = nx.get_node_attributes(graph, "degree")
-    degree = {int(key): value for key, value in degree.items()}
-    degree_df = pd.DataFrame.from_dict(degree, orient='index').rename(columns={0: 'degree'})
+    for feature in features:
+        attribute = nx.get_node_attributes(graph, feature)
+        attribute = {int(key): value for key, value in attribute.items()}
+        attribute_df = pd.DataFrame.from_dict(attribute, orient='index').rename(columns={0: feature})
+        dfs.append(attribute_df)
 
-    dfs = [df, betweenness_df, degree_df]
     return ft.reduce(lambda left, right: pd.merge(left, right, left_index=True, right_index=True), dfs)
-
 
 def get_embeddings_from_genres_and_themes(proba: dict) -> dict:
     """
