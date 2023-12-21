@@ -2,6 +2,10 @@
 
 <br>
 
+## Data Story
+
+Our data story can be found [here](https://thainamhoang.github.io/adasite/).
+
 ## Table of Contents
 <p>
   <a href="#abstract-">Abstract</a> •
@@ -168,11 +172,11 @@ regression and dummy variables.
 .
 ```
 
-## Team Organization 👬
+## Contributions of the Members 👬
 
-- **Nam**: GitHub pages 
-- **Valentin**: preprocessing & network graph analysis
-- **Paul**: correlation analysis & data story
-- **Quentin**: NLI based text classification & data story
-- **Jan**: network graphs & data story
+- **Nam**: 
+- **Valentin**: 
+- **Paul**: 
+- **Quentin**: 
+- **Jan**: led the project, generated network graphs, wrote the data story, contributed to graph generation and correlation analysis
 
