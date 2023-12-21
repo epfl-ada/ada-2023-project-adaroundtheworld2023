@@ -13,7 +13,7 @@ import networkx as nx
 import functools as ft
 
 from pathlib import Path
-from bokeh.models import ColumnDataSource, DataTable, TableColumn
+from bokeh.models import ColumnDataSource, DataTable, TableColumn, InlineStyleSheet
 
 
 def get_list_from_string_dict(value: str) -> list:
@@ -60,7 +60,11 @@ def get_embeddings_from_json(year: int, approach: str) -> dict:
 
 def get_similarities_from_json(decade: int, approach: str) -> dict:
     """
-    TODO: update
+    Get similarities for the given decade and approach for every movie pair.
+
+    :param decade: from 1920-2010
+    :param approach: either "custom_genres" or "embedding"
+    :return: dictionary with keys as tuple of movies and value as float
     """
     root_path = Path(__file__).parent.parent
     filepath = os.path.join(root_path, 'data', 'similarities', approach, f'similarities_{decade}s.json')
@@ -176,15 +180,24 @@ def get_embeddings_from_genres_and_themes(proba: dict) -> dict:
     return embedding_dict
 
 
-def get_bokeh_table(df: pd.DataFrame):
+def get_bokeh_table(df: pd.DataFrame, css_class: str = ''):
     """Convert pandas df to Bokeh's DataTable."""
     source = ColumnDataSource(df)
 
+    custom_css = ".slick-pane-header { text-align: center !important; }"
+    stylesheet = InlineStyleSheet(css=custom_css)
+
     cols = []
     for col_name in df.columns:
-        cols.append(TableColumn(field=col_name, title=col_name))
+        col = TableColumn(field=col_name, title=col_name)
+        col.formatter.text_align = 'right'
+        cols.append(col)
 
-    return DataTable(source=source, columns=cols)
+    return DataTable(
+        source=source, columns=cols, min_height=45,
+        sizing_mode='stretch_width', stylesheets=[stylesheet],
+        css_classes=[css_class]
+    )
 
 
 def add_default_attributes(graph, df: pd.DataFrame):

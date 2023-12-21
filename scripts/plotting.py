@@ -300,35 +300,15 @@ def plot_bokeh_graph(
     return column(widget, plot, sizing_mode='stretch_width', height=700, stylesheets=[stylesheet])
 
 
-def plot_bokeh_histogram_w_threshold(frequency, bins, threshold):
-    """TODO: add comments"""
-    curdoc().theme = 'light_minimal'
-
-    plot = figure(
-        toolbar_location=None,
-        **{'sizing_mode': 'stretch_width', 'height': 450}
-    )
-
-    plot.quad(
-        top=frequency, bottom=0, left=bins[:-1], right=bins[1:],
-        fill_color=cividis(1)[0], line_color="white"
-    )
-
-    plot.vspan(x=threshold, line_width=3, line_color="red")
-
-    plot.y_range.start = 0
-    plot.yaxis.axis_label = "Frequency"
-    plot.xaxis.axis_label = "Cosine Similarity"
-
-
 def plot_bokeh_scatter(df: pd.DataFrame, x: str, slope: float, intercept: float):
     """
-    TODO: update
-    :param df:
-    :param x:
-    :param slope:
-    :param intercept:
-    :return:
+    Helper functions for plotting scatterplots with regression line in Bokeh.
+
+    :param df: with all the data about the movies
+    :param x: coordinates
+    :param slope: of the regression line
+    :param intercept: of the regression line
+    :return: Bokeh plot object
     """
     curdoc().theme = 'light_minimal'
 
