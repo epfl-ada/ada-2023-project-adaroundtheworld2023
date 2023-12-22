@@ -174,9 +174,9 @@ regression and dummy variables.
 
 ## Contributions of the Members 👬
 
-- **Nam**: 
-- **Valentin**: The correlation analysis and partial corellation analysis. Responsible for the  preprocesing of the data. Wrote the etical risks analysis.
+- **Nam**:
+- **Valentin**: The correlation analysis and partial correlation analysis. Responsible for the  preprocessing of the data. Wrote the ethical risks analysis.
 - **Paul**: Classification using NLP, adjusting the data with the IMBD ratings, raw genres approach and contributing to graph generation.
-- **Quentin**: NLI based text classification, some graphs
+- **Quentin**: NLI based text classification, some graphs.
 - **Jan**: Led the project, generated network graphs, wrote the data story, contributed to graph generation and correlation analysis.
 
