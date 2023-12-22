@@ -176,7 +176,7 @@ regression and dummy variables.
 
 - **Nam**: 
 - **Valentin**: The correlation analysis and partial corellation analysis. Responsible for the  preprocesing of the data. Wrote the etical risks analysis.
-- **Paul**: 
+- **Paul**: Classification using NLP, adjusting the data with the IMBD ratings, raw genres approach and contributing to graph generation.
 - **Quentin**: 
 - **Jan**: led the project, generated network graphs, wrote the data story, contributed to graph generation and correlation analysis
 
