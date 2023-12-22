@@ -32,14 +32,14 @@ and extract it to `data/raw`.
 ### Graph Data
 
 In order to download the preprocessed data for graphs (classification, embeddings, 
-similarities, graphs), use the script below. Notice that it may take up to an hour:
+similarities, graphs), use the script below. Notice that it may take up to 30 minutes:
 
 ```bash
 sudo chmod +x scripts/extract-graph-data.sh && ./scripts/extract-graph-data.sh
 ```
 
 Alternatively, you can just use the 
-[link](TODO: update) 
+[link](https://drive.google.com/file/d/1uaHnD8oSATjmyZfrbtTXp5_WRvPYG5zP/view?usp=drive_link) 
 to download and extract the data to the current directory.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
