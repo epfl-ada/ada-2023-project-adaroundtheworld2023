@@ -3,7 +3,7 @@
 # constants
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$(dirname "$CURRENT_DIR")"
-FILE_ID=""  # TODO: update
+FILE_ID="1uaHnD8oSATjmyZfrbtTXp5_WRvPYG5zP"
 DATA_PATH="$ROOT_DIR/data"
 FILENAME="graph_data.zip"
 

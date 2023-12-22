@@ -13,7 +13,7 @@ Our data story can be found [here](https://thainamhoang.github.io/adasite/).
   <a href="#additional-datasets-">Additional Datasets</a> •
   <a href="#methods-">Methods</a> •
   <a href="#timeline-">Timeline</a> •
-  <a href="#team-organization-">Team Organization</a>
+  <a href="#contributions-of-the-members-">Contributions of the Members</a>
 </p>
 
 ## Abstract 📌
@@ -178,5 +178,5 @@ regression and dummy variables.
 - **Valentin**: The correlation analysis and partial corellation analysis. Responsible for the  preprocesing of the data. Wrote the etical risks analysis.
 - **Paul**: Classification using NLP, adjusting the data with the IMBD ratings, raw genres approach and contributing to graph generation.
 - **Quentin**: 
-- **Jan**: led the project, generated network graphs, wrote the data story, contributed to graph generation and correlation analysis
+- **Jan**: Led the project, generated network graphs, wrote the data story, contributed to graph generation and correlation analysis.
 
